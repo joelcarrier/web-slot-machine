@@ -1,0 +1,102 @@
+{{extend 'layout.html'}}
+
+
+<div class="row">
+    <div id="slot_one" style="background-color:#3A87AD;" class="span3">&nbsp;</div>
+    <div id="slot_two" style="background-color:#F89406;" class="span3">&nbsp;</div>
+    <div id="slot_three" style="background-color:#B94A48;" class="span3">&nbsp;</div>
+    <div class="span2">
+        <button id="spin-button"  class="btn btn-primary">
+            Spin!
+        </button>
+        <a class="btn btn-danger"  href="logout"><i class="icon-off icon-white"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div id="bar-wrapper" class="span9 progress progress-info progress-striped">
+        <div id="bar" class="bar"
+            style="width: 0%;">
+        </div>
+    </div>    
+    <div class="span3">
+        <span id="credits" class="label label-success">{{=credits}}</span> credits left.
+    </div>
+</div>
+<div class="row">
+  <div id = "alert" class="span9 alert alert-success hide">
+  </div>
+</div>
+
+<!--
+This script is responsible for invoking a SPIN
+and updating the user interface afterwards.
+-->
+<script>
+    $('#spin-button').click(function() {
+        $('#alert').addClass("hide")
+        $('#spin-button').addClass("disabled")
+        $('#spin-button').html("spinning...")
+        $('#bar').css("width","0%")
+        $('#bar-wrapper').addClass("active")
+        $('#bar-wrapper').removeClass("progress-danger")
+        $('#bar-wrapper').removeClass("progress-success")
+        $('#bar-wrapper').addClass("progress-info")
+        $('#slot_one').animate({opacity:0}, 500, function() {
+            $('#bar').css("width","15%")
+            $('#slot_two').animate({opacity:0}, 500, function() {
+                $('#bar').css("width","30%")
+                $('#slot_three').animate({opacity:0}, 500, function() {
+                    $('#bar').css("width","45%")
+                    $.ajax({ url: "spin.json", success: function(data){
+                            $('#bar').css("width","60%")
+                            $('#bar-wrapper').removeClass("progress-info")
+                            if (data.delta != 0) {
+                                $('#bar-wrapper').addClass("progress-success")
+                                } else {
+                                $('#bar-wrapper').addClass("progress-danger")
+                            }  
+                            if (data.credits < 1) {
+                                window.location.href = "evict_user";
+                            }
+                            if (data.delta > 0) {
+                             $('#alert').removeClass("hide")
+                             $('#alert').html("You've won "+data.delta+" credits!") 
+                            } 
+                            $('#credits').html(data.credits)   
+                            $('#slot_one').css('backgroundColor', data.slot_one_color)
+                            $('#slot_two').css('backgroundColor', data.slot_two_color)
+                            $('#slot_three').css('backgroundColor', data.slot_three_color)
+                            $('#slot_one').animate({opacity:100}, 500, function() {
+                                $('#bar').css("width","75%")
+                                $('#slot_two').animate({opacity:100}, 500, function() {
+                                    $('#bar').css("width","90%")
+                                    $('#slot_three').animate({opacity:100}, 500, function() {
+                                        $('#spin-button').removeClass("disabled")
+                                        $('#spin-button').html("Spin Again!")
+                                        $('#bar').css("width","100%")
+                                        $('#bar-wrapper').removeClass("active")
+                                    });
+                                });
+                            });
+                    }, dataType: "json", timeout: 30000 });        
+                });
+            });
+        });
+    });
+
+</script>
+
+<!-- 
+The following script polls the server for changes to credit.
+This means that if a user has the slot machine open in more than one
+browser window, the number of credits will update as a result of activity
+in another window.
+-->
+<script>
+(function poll(){
+    $.ajax({ url: "credits", success: function(data){
+           jQuery('#credits').html(data);        
+
+    }, dataType: "json", complete: poll, timeout: 30000 });
+})();
+</script>

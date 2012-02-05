@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <!-- include stylesheets -->
+  {{
+  response.files.append(URL('static','js/bootstrap.js'))
+  response.files.append(URL('static','css/bootstrap.css'))
+  }}
+
+  {{include 'web2py_ajax.html'}}
+
+
+</head>
+<body>
+<div class="container">
+
+    <div class="hero-unit">
+        {{if session.user:}}
+        <h1>{{=session.user.username}},</h1>
+        {{pass}}
+        <h2>Welcome to Colour Spinner!</h2>
+        <p>The game is simple.  Push the button and win.  </p>
+        <p>
+           These are the payouts.
+           <ul>
+               <li>
+                   Three <span class="label label-info">BLUE</span> get you 4 credits.
+               </li>
+               <li>
+                   Three <span class="label label-warning">YELLOW</span> get you 8 credits.
+               </li>
+               <li>
+                   Three <span class="label label-important">RED</span> get you 12 credits.
+               </li>
+           </ul>
+        </p>
+      </div>
+
+    {{include}}
+
+    </div> <!-- /container -->
+
+</body>
+</html>
