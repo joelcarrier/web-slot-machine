@@ -1,4 +1,3 @@
-
 This is a technical exercise.
 
 The framework used is WEB2PY, which is a python based MVC framework for rapid web development.
@@ -15,7 +14,7 @@ controllers/default.py  is the controller which holds the application's business
 
 views/layout.html is a template included by other views which describes the layout.
 
-views/default/login.html and views/default/logout.html take care of user login/logout
+views/default/login.html take care of user login
 
 views/default/evict_user.html explains to the user that they've run out of credit
 
