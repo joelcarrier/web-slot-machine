@@ -1,1 +1,32 @@
-This project is just an exercise.
+
+This is a technical exercise.
+
+The framework used is WEB2PY, which is a python based MVC framework for rapid web development.
+It was selected because of previous experience working with it.
+
+This repository only contains the files that need to be deployed in a WEB2PY installation.
+
+
+The main components are listed below.  If you would like to browser the source code this is what you will want to view.
+
+models/db.py contains the very simple model.
+
+controllers/default.py  is the controller which holds the application's business logic.
+
+views/layout.html is a template included by other views which describes the layout.
+
+views/default/login.html and views/default/logout.html take care of user login/logout
+
+views/default/evict_user.html explains to the user that they've run out of credit
+
+views/default/play.html holds the most important view, the game itself.
+
+
+
+bootstrap.css is a css framework selected because it is great for "bootstrapping" an application.
+Although the fanciest transitions are only supported by webkit based browsers (Chrome, Safari, iOS browser...) the presentation degrades gracefully for other browsers.
+
+Once the user is logged into the game, jQuery is used to update the page to reflect updates in game state asynchronously.
+Further, a polling function is included so that if a user is logged in in multiple browser windows, the number of credits displayed with continuously be updated.
+
+Improvements that would be implemented given more time have been recorded as issues.
